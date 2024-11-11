@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arcade - Caesar Cipher Game</title>
+  <style>
+    /* General styling */
+    body {
+      background-image: url('bg.jpg'); 
+      font-family: Arial, sans-serif;
+      background-color: #1e272e;
+      color: #f5f6fa;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00a8ff;
+      font-size: 2em;
+      margin-top: 20px;
+    }
+
+    .difficulty-button {
+      background-color: #2f3640;
+      border: 2px solid #4cd137;
+      color: #f5f6fa;
+      font-size: 1.5em;
+      padding: 20px;
+      margin: 20px;
+      cursor: pointer;
+      border-radius: 8px;
+      width: 200px;
+      transition: background-color 0.3s;
+    }
+
+    .difficulty-button:hover {
+      background-color: #4cd137;
+    }
+
+    /* Grid for card layout (Matrix format) */
+    .grid {
+      display: grid;
+      gap: 20px; /* Increase the gap between the cards */
+      justify-content: center;
+      margin-top: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Makes cards responsive */
+      margin: 0 auto;
+    }
+
+    /* Style for each card */
+    .card {
+      background-color: #2f3640;
+      border: 2px solid #4cd137;
+      color: #f5f6fa;
+      font-size: 1.5em;
+      text-align: center;
+      line-height: 120px; /* Vertically center text */
+      border-radius: 8px;
+      width: 220px; /* Increase width */
+      height: 120px; /* Increase height */
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s; /* Added transition for smooth effect */
+    }
+
+    .card.flipped {
+      background-color: #44bd32;
+    }
+
+    .card:hover {
+      background-color: #4cd137;
+      transform: scale(1.05); /* Slight zoom effect on hover */
+    }
+
+    /* Notification for match found */
+    #matchNotification {
+      position: fixed;
+      bottom: 20px;
+      left: -100%;
+      width: 100%;
+      text-align: center;
+      font-size: 1.5em;
+      color: #00ff00;
+      font-family: "Courier New", Courier, monospace;
+      animation: slideInOutSlow 4s ease-in-out forwards;
+      z-index: 10;
+    }
+
+    @keyframes slideInOutSlow {
+      0% {
+        left: -100%;
+      }
+      50% {
+        left: 0;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Adjustments for responsiveness */
+    @media (max-width: 768px) {
+      .difficulty-button {
+        width: 180px;
+        font-size: 1.2em;
+      }
+
+      .grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Smaller cards for smaller screens */
+      }
+
+      .card {
+        width: 100px;
+        height: 100px;
+        line-height: 100px; /* Adjust line height */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .difficulty-button {
+        width: 150px;
+        font-size: 1em;
+      }
+
+      .grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Even smaller cards on very small screens */
+      }
+
+      .card {
+        width: 80px;
+        height: 80px;
+        line-height: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Arcade - Caesar Cipher Game</h1>
+  <button class="difficulty-button" onclick="generateGrid(8)">Easy (8 Blocks)</button>
+  <button class="difficulty-button" onclick="generateGrid(16)">Medium (16 Blocks)</button>
+  <button class="difficulty-button" onclick="generateGrid(24)">Hard (24 Blocks)</button>
+
+  <div id="matchNotification" class="hidden">Match Found!</div>
+  <div id="gridContainer" class="grid"></div>
+  <p id="matchesFound">Matches Found: 0</p>
+
+  <script>
+    // Caesar Cipher Function
+    function caesarCipher(text, shift) {
+      return text
+        .split("")
+        .map((char) => {
+          if (char.match(/[a-zA-Z]/i)) {
+            const code = char.charCodeAt(0);
+            const offset = code >= 65 && code <= 90 ? 65 : 97;
+            return String.fromCharCode(((code - offset + shift) % 26) + offset);
+          }
+          return char;
+        })
+        .join("");
+    }
+
+    // Define the encrypted and decrypted pairs with extra words for Hard difficulty
+    const cardPairs = [
+      { id: 1, text: "ENCRYPT", encrypted: caesarCipher("ENCRYPT", 3) },
+      { id: 2, text: "DECRYPT", encrypted: caesarCipher("DECRYPT", 3) },
+      { id: 3, text: "SECURITY", encrypted: caesarCipher("SECURITY", 3) },
+      { id: 4, text: "SECRET", encrypted: caesarCipher("SECRET", 3) },
+      { id: 5, text: "HASH", encrypted: caesarCipher("HASH", 3) },
+      { id: 6, text: "CIPHER", encrypted: caesarCipher("CIPHER", 3) },
+      { id: 7, text: "AES", encrypted: caesarCipher("AES", 3) },
+      { id: 8, text: "RSA", encrypted: caesarCipher("RSA", 3) },
+      { id: 9, text: "ALGORITHM", encrypted: caesarCipher("ALGORITHM", 3) },
+      { id: 10, text: "CRYPTOGRAPHY", encrypted: caesarCipher("CRYPTOGRAPHY", 3) },
+      { id: 11, text: "ENCRYPTION", encrypted: caesarCipher("ENCRYPTION", 3) },
+      { id: 12, text: "DECRYPTION", encrypted: caesarCipher("DECRYPTION", 3) },
+      { id: 13, text: "PUBLIC", encrypted: caesarCipher("PUBLIC", 3) },
+      { id: 14, text: "PRIVATE", encrypted: caesarCipher("PRIVATE", 3) },
+      { id: 15, text: "KEY", encrypted: caesarCipher("KEY", 3) },
+      { id: 16, text: "BLOCKCHAIN", encrypted: caesarCipher("BLOCKCHAIN", 3) },
+      { id: 17, text: "HACKER", encrypted: caesarCipher("HACKER", 3) },
+      { id: 18, text: "ATTACK", encrypted: caesarCipher("ATTACK", 3) },
+      { id: 19, text: "FIREWALL", encrypted: caesarCipher("FIREWALL", 3) },
+      { id: 20, text: "INTRUSION", encrypted: caesarCipher("INTRUSION", 3) },
+      { id: 21, text: "TROJAN", encrypted: caesarCipher("TROJAN", 3) },
+      { id: 22, text: "VIRUS", encrypted: caesarCipher("VIRUS", 3) },
+      { id: 23, text: "SPYWARE", encrypted: caesarCipher("SPYWARE", 3) },
+      { id: 24, text: "MALWARE", encrypted: caesarCipher("MALWARE", 3) }
+    ];
+
+    let cards = [];
+    let flippedCards = [];
+    let matchesFound = 0;
+
+    // Generate the grid based on selected difficulty
+    function generateGrid(numBlocks) {
+      const gridContainer = document.getElementById('gridContainer');
+      gridContainer.innerHTML = ''; // Clear the grid before generating a new one
+      cards = [];
+
+      // Calculate number of pairs based on numBlocks
+      const numPairs = numBlocks / 2;
+
+      // Create the card pairs based on difficulty
+      const selectedPairs = cardPairs.slice(0, numPairs).map(card => [
+        { ...card, flipped: false, isEncrypted: true },
+        { ...card, flipped: false, text: card.text, isEncrypted: false }
+      ]).flat();
+
+      // Shuffle the cards
+      cards = selectedPairs
+        .sort(() => Math.random() - 0.5)
+        .map((card, index) => ({ ...card, index }));
+
+      // Set grid template based on difficulty
+      if (numBlocks === 8) {
+        gridContainer.style.gridTemplateColumns = "repeat(4, 1fr)"; // 2x4 grid
+      } else if (numBlocks === 16) {
+        gridContainer.style.gridTemplateColumns = "repeat(4, 1fr)"; // 4x4 grid
+      } else if (numBlocks === 24) {
+        gridContainer.style.gridTemplateColumns = "repeat(6, 1fr)"; // 4x6 grid
+      }
+
+      // Render the cards
+      cards.forEach(card => {
+        const cardElement = document.createElement("div");
+        cardElement.classList.add("card");
+        cardElement.setAttribute("data-index", card.index);
+        cardElement.addEventListener("click", () => handleCardClick(card.index));
+        gridContainer.appendChild(cardElement);
+      });
+    }
+
+    // Handle card click event
+    function handleCardClick(index) {
+      const clickedCard = cards[index];
+      if (flippedCards.length === 2 || clickedCard.flipped) return;
+
+      clickedCard.flipped = true;
+      flippedCards.push(clickedCard);
+      document.querySelector(`[data-index='${index}']`).classList.add("flipped");
+
+      // Show either the encrypted or decrypted text
+      document.querySelector(`[data-index='${index}']`).innerText =
+        clickedCard.isEncrypted ? clickedCard.encrypted : clickedCard.text;
+
+      // Check if two cards are flipped
+      if (flippedCards.length === 2) {
+        checkForMatch();
+      }
+    }
+
+    // Show match notification
+    function showMatchNotification() {
+      const notification = document.getElementById("matchNotification");
+      notification.classList.remove("hidden");
+      setTimeout(() => {
+        notification.classList.add("hidden");
+      }, 4000);
+    }
+
+    // Check for match
+    function checkForMatch() {
+      const [firstCard, secondCard] = flippedCards;
+
+      if (firstCard.id === secondCard.id && firstCard.isEncrypted !== secondCard.isEncrypted) {
+        matchesFound++;
+        document.getElementById("matchesFound").innerText = `Matches Found: ${matchesFound}`;
+        flippedCards = [];
+        showMatchNotification();
+
+        if (matchesFound === cards.length / 2) {
+          alert("Congratulations! You've matched all pairs!");
+        }
+      } else {
+        setTimeout(() => {
+          firstCard.flipped = false;
+          secondCard.flipped = false;
+          document.querySelector(`[data-index='${firstCard.index}']`).classList.remove("flipped");
+          document.querySelector(`[data-index='${firstCard.index}']`).innerText = "";
+          document.querySelector(`[data-index='${secondCard.index}']`).classList.remove("flipped");
+          document.querySelector(`[data-index='${secondCard.index}']`).innerText = "";
+          flippedCards = [];
+        }, 1000);
+      }
+    }
+  </script>
+
+</body>
+</html>

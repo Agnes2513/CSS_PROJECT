@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About the Game - Caesar Cipher Arcade</title>
+  <style>
+    /* General styling */
+    body {
+      background-image: url('bg.jpg'); 
+      font-family: Arial, sans-serif;
+      background-color: #1e272e;
+      color: #f5f6fa;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00a8ff;
+      font-size: 2.5em;
+      margin-top: 40px;
+    }
+
+    h2 {
+      color: #4cd137;
+      font-size: 2em;
+      margin-top: 30px;
+    }
+
+    p {
+      font-size: 1.2em;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Card styling for themed look */
+    .content-container {
+      max-width: 1000px;
+      margin: 40px auto;
+    }
+
+    .card {
+      display: inline-block;
+      background-color: #2f3640;
+      color: #f5f6fa;
+      font-size: 1.2em;
+      width: 100%;
+      padding: 40px;
+      margin-top: 30px;
+      border-radius: 8px;
+      border: 2px solid #4cd137;
+      text-align: left;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .card h3 {
+      color: #4cd137;
+      font-size: 1.8em;
+    }
+
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card ul li {
+      margin: 10px 0;
+    }
+
+    .card button {
+      background-color: #4cd137;
+      color: #f5f6fa;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+    }
+
+    .card button:hover {
+      background-color: #2f3640;
+      color: #4cd137;
+    }
+
+    /* Adjustments for mobile responsiveness */
+    @media (max-width: 768px) {
+      .card {
+        padding: 20px;
+        font-size: 1em;
+      }
+
+      .card h3 {
+        font-size: 1.5em;
+      }
+
+      p {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="content-container">
+    <h1>About the Game - Caesar Cipher Arcade</h1>
+
+    <div class="card">
+      <h3>Game Introduction</h3>
+      <p>The Caesar Cipher Arcade Game is a fun and interactive way to learn about cryptography, specifically the Caesar Cipher. In this game, players are challenged to match pairs of encrypted and decrypted words based on a simple encryption algorithm. The goal is to identify which encrypted word corresponds to which decrypted word by flipping cards and remembering their positions.</p>
+    </div>
+
+    <div class="card">
+      <h3>Game Mechanics</h3>
+      <p>The game is based on the classical Caesar Cipher encryption technique, which shifts each letter of a given word by a fixed number. For example, shifting each letter by 3 results in an encrypted word. The player needs to match the encrypted word with its corresponding decrypted version by flipping cards and using their memory.</p>
+    </div>
+
+    <div class="card">
+      <h3>Gameplay Features</h3>
+      <ul>
+        <li>Match encrypted words with their decrypted counterparts.</li>
+        <li>Flip two cards at a time and try to find matching pairs.</li>
+        <li>The player earns points for each correct match.</li>
+        <li>The game ends when all pairs are matched correctly.</li>
+      </ul>
+      <button onclick="window.location.href='index.html'">Play Now</button>
+    </div>
+
+    <div class="card">
+      <h3>The Algorithm - Caesar Cipher</h3>
+      <p>The Caesar Cipher is one of the oldest and simplest encryption techniques. The algorithm works by shifting the letters of the alphabet by a fixed number. For example, if we shift each letter by 3, 'A' becomes 'D', 'B' becomes 'E', and so on. The shift value is constant across the entire word. Here's how it works:</p>
+      <ul>
+        <li>The user provides a word, which is encrypted using a shift value (in this game, 3).</li>
+        <li>The shift value is applied to each letter of the word.</li>
+        <li>The resulting word is the encrypted version of the original word.</li>
+        <li>The player needs to match encrypted words with the original ones by remembering their positions.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Game Strategy</h3>
+      <p>In this game, the player must memorize the positions of the cards, identify the encrypted and decrypted pairs, and flip the correct cards to match them. The game encourages both memory and problem-solving skills, making it a fun way to learn about encryption and cryptography!</p>
+    </div>
+
+    <div class="card">
+      <h3>Final Thoughts</h3>
+      <p>Whether you're new to cryptography or just looking for a fun way to learn about encryption, the Caesar Cipher Arcade Game is the perfect choice. It offers both a challenge and an opportunity to learn the fundamentals of cryptographic techniques in an engaging environment!</p>
+    </div>
+  </div>
+
+</body>
+</html>
